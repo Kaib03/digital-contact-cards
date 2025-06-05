@@ -109,7 +109,7 @@ class ContactCardGenerator:
             '<h2>Product Manager</h2>': f"<h2>{member_data['title']}</h2>",
             
             # Company logo - use local relative path for GitHub Pages
-            'https://your-org.github.io/team-contacts/assets/logo.png': '../assets/logo.png',
+            'https://your-org.github.io/team-contacts/assets/logo.png': '../assets/images/logo_scalewave_cropped.png',
             'Acme Startup Logo': f"{member_data['company_name']} Logo",
             
             # Avatar image alt text
@@ -233,7 +233,7 @@ class ContactCardGenerator:
                 member.setdefault('linkedin_url', '')
                 member.setdefault('twitter_handle', '')
                 member.setdefault('avatar_url', '')
-                member.setdefault('company_logo_url', '../assets/logo.png')
+                member.setdefault('company_logo_url', '../assets/images/logo_scalewave_cropped.png')
                 
                 # Skip if missing required fields
                 if not member.get('first_name') or not member.get('last_name') or not member.get('email'):
