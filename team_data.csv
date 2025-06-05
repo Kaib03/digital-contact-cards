@@ -1,5 +1,7 @@
 first_name,last_name,title,company_name,phone,email,linkedin_url,twitter_handle
-Jane,Doe,Product Manager,Scalewave,+1234567890,jane.doe@scalewave.com,https://linkedin.com/in/janedoe,@jane_doe
-John,Smith,Senior Developer,Scalewave,+1987654321,john.smith@scalewave.com,https://linkedin.com/in/johnsmith,@johnsmith_dev
-Sarah,Johnson,Marketing Director,Scalewave,+1555123456,sarah.johnson@scalewave.com,https://linkedin.com/in/sarahjohnson,
-Michael,Brown,CTO,Scalewave,+1444987654,michael.brown@scalewave.com,https://linkedin.com/in/michaelbrown,@mike_brown_cto 
+Victor,Bellens,Junior Software Engineer,ScaleWave,+34 637531793,vicbellens@gmail.com,https://www.linkedin.com/victorbellens,@victor_bellens
+Gustavo,Maryssael,CEO,ScaleWave,+34 623380261,gustavo@scalewave.es,https://www.linkedin.com/in/gustavo-emilio-maryssael-8a108b120/,
+Aly,Shourbagui,Junior Software Engineer,ScaleWave,+34 652855725,ashourbagui.ieu2023@student.ie.edu,https://www.linkedin.com/in/alyshourbagui/,
+Samer,Roz,Junior Software Engineer,ScaleWave,+34628512387,sroz.ieu2022@student.ie.edu,https://www.linkedin.com/in/samerroz03/,
+Juan Bautista,Beyhaut,Junior Software Engineer,ScaleWave,+34671678242,jbbeyhaut@gmail.com,www.linkedin.com/in/juan-bautista-beyhaut,
+Jose Antonio,Garcia,CTO,ScaleWave,+34634389637,jose@scalewave.es,https://www.linkedin.com/in/jose-antonio-garcia-escandon,
