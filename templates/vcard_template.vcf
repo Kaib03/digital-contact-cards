@@ -1,0 +1,6 @@
+BEGIN:VCARDVERSION:3.0FN:{{FIRST_NAME}} {{LAST_NAME}}N:{{LAST_NAME}};{{FIRST_NAME}};;;ORG:YourCompanyTITLE:{{TITLE}}TEL;TYPE=WORK,VOICE:{{PHONE}}EMAIL:{{EMAIL}}URL:https://YourGitHubUsername.github.io/digital-contact-cards/{{USERNAME}}.html
+{% if PHOTO_FILENAME %}PHOTO;MEDIATYPE=image/jpeg:https://Kaiba03.github.io/digital-contact-cards/assets/{{PHOTO_FILENAME}}{% endif %}
+{% if LINKEDIN %}X-SOCIALPROFILE;TYPE=linkedin:{{LINKEDIN}}
+{% endif %}
+{% if TWITTER %}X-SOCIALPROFILE;TYPE=twitter:{{TWITTER}}
+{% endif %}END:VCARD

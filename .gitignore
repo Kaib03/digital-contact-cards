@@ -1,0 +1,50 @@
+# Apple Developer Certificates (NEVER commit these!)
+*.p12
+*.cer
+*.pem
+*.certSigningRequest
+
+# Output directories (will be regenerated)
+output/
+html/
+vcf/
+pass_previews/
+passes/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Thumbnails
+*.tmp
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp 

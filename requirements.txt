@@ -1,0 +1,25 @@
+# Digital Contact Card Generator & Apple Wallet Pass Generator Requirements
+
+# For original contact card generator (uses only standard library):
+# - csv (for reading CSV files)
+# - os (for file system operations)  
+# - re (for text processing)
+# - pathlib (for path handling)
+
+# For Apple Wallet pass generator:
+Pillow>=9.0.0         # For image processing (PIL)
+requests>=2.25.0      # For downloading images from URLs
+qrcode>=7.0.0         # For generating QR codes in previews
+
+# Development dependencies (optional):
+# pytest>=6.0.0       # For testing
+# black>=21.0.0        # For code formatting
+
+# To install wallet pass generator dependencies:
+# pip install -r requirements.txt
+
+# Minimum Python version: 3.7+
+# (Pillow requires Python 3.7+)
+
+# To run this project, you only need Python 3.6 or higher
+# No pip install commands are necessary 
