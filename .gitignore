@@ -6,8 +6,6 @@
 
 # Output directories (will be regenerated)
 output/
-html/
-vcf/
 pass_previews/
 passes/
 
