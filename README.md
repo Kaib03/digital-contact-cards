@@ -1,42 +1,54 @@
-# Digital Contact Cards - Apple Wallet Passes
+# Digital Contact Card Generator
 
-This project generates Apple Wallet passes for team members that can be shared via QR codes and added to Apple Wallet.
+This project generates a responsive, mobile-first website with digital contact cards for each team member. It's designed for easy sharing via NFC tags, QR codes, or direct links.
 
-## How It Works
+![Team Page Screenshot](https://user-images.githubusercontent.com/12345/some-image-url.png) <!-- Replace with an actual screenshot -->
 
-The project creates digital business cards that:
-- Generate Apple Wallet passes (`.pkpass` files)
-- Link to individual contact pages on GitHub Pages
-- Can be scanned via QR codes or shared directly
+## Features
 
-## Quick Start
+- **Automated Generation**: Creates individual HTML contact pages from a simple `team_data.csv` file.
+- **Central Team Page**: Generates a main `index.html` that links to all team members.
+- **Sharable vCards**: Each contact page includes a "Save Contact" button to download a `.vcf` file.
+- **Customizable**: Easily adapt templates and styles to match your brand.
+- **GitHub Pages Ready**: Deploy the generated `output` directory directly to a `gh-pages` branch.
 
-### 1. Generate Passes
+## How to Use
+
+### 1. Update Team Data
+Modify the `team_data.csv` file to add, remove, or update team member information. The required fields are `first_name`, `last_name`, and `email`.
+
+You can also add optional fields like:
+- `title`
+- `phone`
+- `linkedin_url`
+- `twitter_handle`
+- `avatar_url` (if you want to use a remote image)
+
+### 2. Add Avatars (Optional)
+For local avatar images, add them to the `assets/team/` directory. The script will automatically find them if they are named in the format `firstname-lastname.jpg` (or other common image formats).
+
+### 3. Generate the Contact Cards
+Run the generation script from the project root:
 ```bash
-python3 scripts/generate_passes.py
+python3 scripts/generate_contact_cards.py
 ```
 
-### 2. Sign Passes
-```bash
-./sign_passes.sh
-```
-Enter your certificate password when prompted.
+### 4. Review the Output
+The generated website will be in the `output/` directory. You can open `output/index.html` in your browser to preview the team page.
 
-### 3. Find Signed Passes
-Your signed `.pkpass` files will be in the `signed_passes/` directory.
+### 5. Deploy
+The contents of the `output/` directory are ready for deployment. You can host them on any web server or use GitHub Pages.
 
 ## Project Structure
 
-- `scripts/generate_passes.py` - Generates pass bundles from CSV data
-- `sign_passes.sh` - Signs passes with your Apple Developer certificates
-- `team_data.csv` - Team member information
-- `config_wallet_passes.py` - Apple Developer configuration
-- `assets/` - Pass icons and logos
-- `certs/` - Apple Developer certificates
-- `wallet_passes/` - Generated pass bundles (unsigned)
-- `signed_passes/` - Final signed `.pkpass` files
-- `html/` - Individual contact card pages
-- `TranzerCode/` - Reference implementation that works
+- **`scripts/generate_contact_cards.py`**: The main Python script that builds the site.
+- **`team_data.csv`**: Your team's contact information.
+- **`templates/`**: Contains the HTML templates for the individual cards (`example.html`) and the main team page (`index_template.html`).
+- **`assets/`**: Holds static assets like logos and team member avatars.
+- **`output/`**: The destination for the generated website files. This is the directory you should deploy.
+  - `index.html`: The main team page.
+  - `html/`: Contains individual contact card pages.
+  - `vcf/`: Contains the generated `.vcf` contact files.
 
 ## Requirements
 
