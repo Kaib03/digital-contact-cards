@@ -67,24 +67,39 @@ echo ""
 echo "Step 3: Deploying website and wallet passes to GitHub Pages..."
 echo "──────────────────────────────────────────────────────────────"
 
-# Deploy to gh-pages using git subtree
-git subtree push --prefix output origin gh-pages
+# Robust deployment method: Delete and recreate gh-pages branch
+# This approach prevents "non-fast-forward" errors that occur when using git subtree
+# on subsequent runs. By deleting and recreating the gh-pages branch each time,
+# we ensure consistent, idempotent deployments.
 
-if [ $? -ne 0 ]; then
-    echo "⚠️  Subtree push failed. Attempting force deployment..."
-    
-    # Alternative deployment method if subtree fails
-    git checkout --orphan temp-gh-pages 2>/dev/null || git checkout temp-gh-pages
-    git --work-tree=output add --all
-    git commit -m "Deploy website + wallet passes - $(date '+%Y-%m-%d %H:%M:%S')" 2>/dev/null || echo "No changes to commit"
-    git push origin temp-gh-pages:gh-pages --force
-    git checkout main
-    git branch -D temp-gh-pages 2>/dev/null || true
-    
-    echo "✅ Alternative deployment completed"
-else
-    echo "✅ Deployment completed successfully"
-fi
+echo "🗑️  Cleaning up remote gh-pages branch..."
+# Delete remote gh-pages branch (ignore errors if branch doesn't exist)
+git push origin --delete gh-pages 2>/dev/null || echo "   Remote gh-pages branch not found (this is normal for first deployment)"
+
+echo "🔄 Creating fresh deployment branch..."
+# Delete local gh-pages branch if it exists
+git branch -D gh-pages 2>/dev/null || true
+
+# Create new orphan branch for deployment
+git checkout --orphan gh-pages
+
+echo "📦 Staging output files for deployment..."
+# Add all files from the output directory as root-level files
+git --work-tree=output add --all
+
+# Commit the deployment
+echo "💾 Committing deployment..."
+git commit -m "Deploy website + wallet passes - $(date '+%Y-%m-%d %H:%M:%S')"
+
+echo "🚀 Pushing to GitHub Pages..."
+# Push the new gh-pages branch
+git push origin gh-pages
+
+echo "🔙 Returning to main branch..."
+# Return to main branch
+git checkout main --force
+
+echo "✅ Robust deployment completed successfully!"
 
 echo ""
 echo "🎉 Deployment Complete!"
