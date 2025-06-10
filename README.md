@@ -34,10 +34,47 @@ digital-contact-cards/
 │   ├── generate_site.py       # Main site generation script
 │   └── generate_passes.py     # Apple Wallet pass generation
 ├── output/                    # Generated website files (auto-created)
-├── signed_passes/             # Generated Apple Wallet passes
+│   ├── html/                  # Individual contact card pages
+│   ├── vcf/                   # VCF download files
+│   └── passes/                # Apple Wallet .pkpass files
+├── signed_passes/             # Temporary wallet pass storage
+├── certs/                     # Apple Developer certificates (required for wallet)
 ├── config.json                # Centralized configuration
 └── team_data.csv              # Team member information
 ```
+
+## Requirements for Apple Wallet
+
+To generate Apple Wallet passes, you must have:
+
+### **1. Apple Developer Account**
+- Active Apple Developer Program membership ($99/year)
+- Access to Apple Developer Portal
+
+### **2. Required Certificates**
+Place these files in the `certs/` directory:
+
+- **`YourPassTypeID.p12`** - Your Pass Type ID certificate
+  - Created in Apple Developer Portal under "Certificates, Identifiers & Profiles"
+  - Must be exported as .p12 file with a password
+  - Update the password in `create_wallet_passes_working.py` if different from default
+
+- **`WWDR.pem`** - Apple Worldwide Developer Relations certificate
+  - Download from Apple Developer Portal
+  - Convert from .cer to .pem format using: `openssl x509 -inform der -in wwdr.cer -out WWDR.pem`
+
+### **3. Required Assets**
+Place these files in `assets/images/`:
+- `icon.png` (29×29 pixels)
+- `icon@2x.png` (58×58 pixels) 
+- `logo.png` (160×50 pixels max)
+- `logo@2x.png` (320×100 pixels max)
+
+### **4. System Requirements**
+- **OpenSSL** installed on your system
+- **Python 3.x** with required dependencies
+
+**⚠️ Note**: If these requirements aren't met, the system will automatically skip wallet pass generation and only create the website.
 
 ## How to Update Team Info (Step-by-Step Guide)
 
@@ -110,6 +147,8 @@ Edit `config.json` to update company information:
    chmod +x deploy.sh
    ```
 
+3. **Set up Apple Wallet certificates** (optional - see Requirements section above)
+
 ### **One-Click Deployment**
 
 After updating your team data, run the automation script:
@@ -120,24 +159,26 @@ After updating your team data, run the automation script:
 
 This single command will:
 1. ✅ Generate the website from your CSV data
-2. ✅ Commit changes to the main branch
-3. ✅ Deploy the website to GitHub Pages
-4. ✅ Provide you with the live URL
+2. ✅ Generate Apple Wallet passes (if certificates available)
+3. ✅ Commit changes to the main branch
+4. ✅ Deploy everything to GitHub Pages
+5. ✅ Provide you with live URLs
 
-**That's it!** Your website will be live in 1-2 minutes at:
-`https://your-username.github.io/your-repo/`
+**That's it!** Your website and wallet passes will be live in 1-2 minutes at:
+- **Website**: `https://your-username.github.io/your-repo/`
+- **Wallet Passes**: `https://your-username.github.io/your-repo/passes/[name].pkpass`
 
 ### **Manual Process (Alternative)**
 
 If you prefer to run commands individually:
 
 ```bash
-# 1. Generate the website
+# 1. Generate the website and wallet passes
 python scripts/generate_site.py
 
 # 2. Commit and push changes
 git add .
-git commit -m "Update team data and regenerate site"
+git commit -m "Update team data and regenerate site + wallet passes"
 git push origin main
 
 # 3. Deploy to GitHub Pages
@@ -146,21 +187,41 @@ git subtree push --prefix output origin gh-pages
 
 ## Apple Wallet Integration
 
-### **Generate Wallet Passes**
+### **Accessing Wallet Passes**
 
-To create Apple Wallet passes for your team:
+Once deployed, your Apple Wallet passes are available at:
+```
+https://your-username.github.io/your-repo/passes/[firstname-lastname].pkpass
+```
+
+**Examples:**
+- `https://kaib03.github.io/digital-contact-cards/passes/john-doe.pkpass`
+- `https://kaib03.github.io/digital-contact-cards/passes/samer-roz.pkpass`
+
+### **Installing Wallet Passes**
+
+**On iOS devices:**
+1. **Safari**: Navigate to the .pkpass URL → Tap "Add to Apple Wallet"
+2. **AirDrop**: Send .pkpass file to iOS device → Tap to open → Add to Wallet
+3. **Email/Messages**: Attach .pkpass file → Recipient taps to add to Wallet
+
+**Features:**
+- QR codes link directly to HTML contact cards
+- Professional Scalewave branding
+- Contact information on the back of the pass
+- Automatic updates when you redeploy
+
+### **Generate Wallet Passes Only**
+
+To create wallet passes without updating the website:
 
 ```bash
 python create_wallet_passes_working.py
 ```
 
 **Requirements:**
-- Apple Developer certificates (see `APPLE_WALLET_CHECKLIST.md`)
+- Apple Developer certificates (see requirements section)
 - OpenSSL installed on your system
-
-**Output:**
-- Wallet passes saved to `signed_passes/` directory
-- QR codes automatically link to your HTML contact cards
 
 ## Customization
 
@@ -217,6 +278,21 @@ Update `config.json` for:
 - Check for special characters in names (use quotes if needed)
 - Verify CSV format is correct
 
+### **Apple Wallet Issues**
+
+1. **Certificates not found**:
+   - Verify `YourPassTypeID.p12` and `WWDR.pem` are in `certs/` directory
+   - Check certificate password in `create_wallet_passes_working.py`
+
+2. **Wallet passes not generating**:
+   - Ensure OpenSSL is installed: `openssl version`
+   - Check that required assets exist in `assets/images/`
+
+3. **Passes not adding to Wallet**:
+   - Verify pass URLs are accessible
+   - Test with Safari on iOS (other browsers may not work)
+   - Check that certificates haven't expired
+
 ## Technical Details
 
 ### **System Architecture**
@@ -224,6 +300,7 @@ Update `config.json` for:
 - **Styling**: External CSS with custom properties for easy theming
 - **Deployment**: GitHub Pages with git subtree
 - **File Structure**: Clean separation of source and generated files
+- **Apple Wallet**: PKPass format with TranzerCode-compatible structure
 
 ### **Performance Features**
 - External CSS reduces HTML file sizes by ~75%
@@ -235,6 +312,7 @@ Update `config.json` for:
 - No server-side processing required
 - Static files only
 - HTTPS enabled via GitHub Pages
+- Apple Wallet passes signed with official certificates
 
 ## Contributing
 
@@ -257,4 +335,4 @@ For issues or questions:
 
 **Project Status**: ✅ Production Ready  
 **Last Updated**: June 2025  
-**Version**: 2.0 (Refactored with Jinja2) 
+**Version**: 2.0 (Refactored with Jinja2 + Apple Wallet Integration) 

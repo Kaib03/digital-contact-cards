@@ -21,6 +21,8 @@ import os
 import re
 import shutil
 import time
+import subprocess
+import sys
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -60,10 +62,13 @@ class ContactCardSiteGenerator:
         self.html_output_dir = self.base_dir / paths['html_output_dir']
         self.vcf_output_dir = self.base_dir / paths['vcf_output_dir']
         self.assets_dir = self.base_dir / paths['assets_dir']
+        self.passes_output_dir = self.base_dir / paths['passes_output_dir']
+        self.signed_passes_dir = self.base_dir / paths['signed_passes_dir']
         
         # Create output directories
         self.html_output_dir.mkdir(parents=True, exist_ok=True)
         self.vcf_output_dir.mkdir(parents=True, exist_ok=True)
+        self.passes_output_dir.mkdir(parents=True, exist_ok=True)
     
     def _setup_jinja(self):
         """Setup Jinja2 environment for templating."""
@@ -283,8 +288,122 @@ class ContactCardSiteGenerator:
         
         print(f"📄 Generated: index.html")
     
+    def check_apple_wallet_requirements(self):
+        """Check if Apple Wallet generation requirements are met."""
+        requirements_met = {
+            'certificates': False,
+            'assets': False,
+            'script': False
+        }
+        
+        # Check certificates
+        cert_path = self.base_dir / "certs" / "YourPassTypeID.p12"
+        wwdr_path = self.base_dir / "certs" / "WWDR.pem"
+        requirements_met['certificates'] = cert_path.exists() and wwdr_path.exists()
+        
+        # Check assets
+        assets_dir = self.base_dir / "assets" / "images"
+        required_assets = ["icon.png", "icon@2x.png", "logo.png", "logo@2x.png"]
+        requirements_met['assets'] = assets_dir.exists() and all(
+            (assets_dir / asset).exists() for asset in required_assets
+        )
+        
+        # Check script
+        wallet_script = self.base_dir / "create_wallet_passes_working.py"
+        requirements_met['script'] = wallet_script.exists()
+        
+        return requirements_met
+    
+    def generate_apple_wallet_passes(self):
+        """Generate Apple Wallet passes by running the wallet script."""
+        print("\n🍎 Generating Apple Wallet passes...")
+        print("─" * 50)
+        
+        # Check requirements
+        requirements = self.check_apple_wallet_requirements()
+        
+        if not all(requirements.values()):
+            print("⚠️  Apple Wallet requirements not met:")
+            if not requirements['certificates']:
+                print("   Missing: Apple Developer certificates in certs/ directory")
+            if not requirements['assets']:
+                print("   Missing: Required assets (icon.png, logo.png, etc.) in assets/images/")
+            if not requirements['script']:
+                print("   Missing: create_wallet_passes_working.py script")
+            print("   Skipping wallet pass generation...")
+            return False
+        
+        # Run the wallet pass generation script
+        wallet_script = self.base_dir / "create_wallet_passes_working.py"
+        
+        try:
+            # Change to base directory to run the script
+            original_dir = Path.cwd()
+            
+            try:
+                # Change to the project root directory
+                import os
+                os.chdir(self.base_dir)
+                
+                # Run the wallet script
+                result = subprocess.run(
+                    [sys.executable, str(wallet_script)], 
+                    capture_output=True, 
+                    text=True,
+                    cwd=str(self.base_dir)
+                )
+                
+                if result.returncode == 0:
+                    print("✅ Apple Wallet passes generated successfully")
+                    
+                    # Copy passes to output directory
+                    return self.copy_passes_to_output()
+                else:
+                    print(f"❌ Apple Wallet generation failed:")
+                    print(f"   Error: {result.stderr}")
+                    return False
+                    
+            finally:
+                # Always return to original directory
+                os.chdir(original_dir)
+                
+        except Exception as e:
+            print(f"❌ Error running Apple Wallet script: {e}")
+            return False
+    
+    def copy_passes_to_output(self):
+        """Copy generated wallet passes from signed_passes/ to output/passes/."""
+        if not self.signed_passes_dir.exists():
+            print("❌ signed_passes directory not found")
+            return False
+        
+        # Find all .pkpass files
+        pkpass_files = list(self.signed_passes_dir.glob("*.pkpass"))
+        
+        if not pkpass_files:
+            print("⚠️  No .pkpass files found in signed_passes directory")
+            return False
+        
+        # Copy each .pkpass file to output/passes/
+        copied_count = 0
+        for pkpass_file in pkpass_files:
+            destination = self.passes_output_dir / pkpass_file.name
+            try:
+                shutil.copy2(pkpass_file, destination)
+                copied_count += 1
+                print(f"📱 Copied: {pkpass_file.name}")
+            except Exception as e:
+                print(f"❌ Failed to copy {pkpass_file.name}: {e}")
+        
+        if copied_count > 0:
+            print(f"✅ Successfully copied {copied_count} wallet passes to output/passes/")
+            return True
+        else:
+            print("❌ No wallet passes were copied")
+            return False
+    
     def generate_all(self):
-        """Generate all HTML and VCF files from CSV data."""
+        """Generate all HTML and VCF files from CSV data, plus Apple Wallet passes."""
         print("🚀 Starting Digital Contact Cards Site Generation...")
         print("=" * 60)
         
@@ -339,6 +458,9 @@ class ContactCardSiteGenerator:
         if valid_members:
             self.generate_index_page(valid_members, cache_buster)
         
+        # Generate Apple Wallet passes
+        wallet_success = self.generate_apple_wallet_passes()
+        
         # Summary
         print("\n" + "=" * 60)
         print(f"🎉 Successfully generated {generated_count} contact cards!")
@@ -347,11 +469,20 @@ class ContactCardSiteGenerator:
         print(f"🌐 Index page: {self.output_dir}/index.html")
         print(f"📁 Assets copied to: {self.output_dir}/assets")
         
+        if wallet_success:
+            print(f"📱 Apple Wallet passes: {self.passes_output_dir}")
+        else:
+            print("⚠️  Apple Wallet passes: Skipped (requirements not met)")
+        
         if generated_count > 0:
             print("\n💡 Next steps:")
             print("1. Review generated files in the output/ directory")
             print("2. Test VCF files on mobile devices")
-            print("3. Deploy to GitHub Pages with: python scripts/deploy_to_github.py")
+            if wallet_success:
+                print("3. Test .pkpass files on iOS devices")
+                print("4. Deploy to GitHub Pages with: ./deploy.sh")
+            else:
+                print("3. Deploy to GitHub Pages with: ./deploy.sh")
         
         return generated_count > 0
 

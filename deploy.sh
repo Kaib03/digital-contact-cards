@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Digital Contact Cards - One-Click Deployment Script
-# This script automates the entire workflow from CSV data to live website
+# This script automates the entire workflow from CSV data to live website + Apple Wallet passes
 
 set -e  # Exit on any error
 
@@ -26,10 +26,10 @@ if [ ! -f "scripts/generate_site.py" ]; then
 fi
 
 echo ""
-echo "Step 1: Generating website from CSV data..."
-echo "──────────────────────────────────────────────"
+echo "Step 1: Generating website and Apple Wallet passes from CSV data..."
+echo "──────────────────────────────────────────────────────────────────"
 
-# Generate the website
+# Generate the website and wallet passes
 python3 scripts/generate_site.py
 
 # Check if generation was successful
@@ -50,7 +50,7 @@ if git diff --staged --quiet; then
     echo "ℹ️  No changes detected. The website is already up to date."
 else
     # Commit the changes
-    git commit -m "Update team data and regenerate site - $(date '+%Y-%m-%d %H:%M:%S')"
+    git commit -m "Update team data and regenerate site + wallet passes - $(date '+%Y-%m-%d %H:%M:%S')"
     echo "✅ Changes committed successfully"
 fi
 
@@ -64,8 +64,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "Step 3: Deploying website to GitHub Pages..."
-echo "──────────────────────────────────────────────"
+echo "Step 3: Deploying website and wallet passes to GitHub Pages..."
+echo "──────────────────────────────────────────────────────────────"
 
 # Deploy to gh-pages using git subtree
 git subtree push --prefix output origin gh-pages
@@ -76,7 +76,7 @@ if [ $? -ne 0 ]; then
     # Alternative deployment method if subtree fails
     git checkout --orphan temp-gh-pages 2>/dev/null || git checkout temp-gh-pages
     git --work-tree=output add --all
-    git commit -m "Deploy website - $(date '+%Y-%m-%d %H:%M:%S')" 2>/dev/null || echo "No changes to commit"
+    git commit -m "Deploy website + wallet passes - $(date '+%Y-%m-%d %H:%M:%S')" 2>/dev/null || echo "No changes to commit"
     git push origin temp-gh-pages:gh-pages --force
     git checkout main
     git branch -D temp-gh-pages 2>/dev/null || true
@@ -114,6 +114,9 @@ if [[ $REPO_URL == *"github.com"* ]]; then
     echo ""
     echo "📱 VCF downloads available at:"
     echo "   ${PAGES_URL}vcf/[name].vcf"
+    echo ""
+    echo "🍎 Apple Wallet passes available at:"
+    echo "   ${PAGES_URL}passes/[name].pkpass"
 else
     echo "🌐 Your website will be available on GitHub Pages"
     echo "   (Unable to determine URL automatically)"
@@ -122,12 +125,10 @@ fi
 echo ""
 echo "⏱️  Note: It may take 1-2 minutes for changes to appear on the live site."
 echo "💡 Tip: Use Ctrl+F5 (or Cmd+Shift+R on Mac) to force refresh your browser."
-
-# Future-Proofing: Add Apple Wallet generation step here later
-# echo ""
-# echo "Step 4: Generating Apple Wallet passes..."
-# echo "──────────────────────────────────────────────"
-# python3 create_wallet_passes_working.py
+echo ""
+echo "📱 Apple Wallet Testing:"
+echo "   • Download .pkpass files on iOS device to add to Wallet"
+echo "   • Scan QR codes in Wallet passes to test contact links"
 
 echo ""
-echo "✅ All done! Your digital contact cards are now live." 
+echo "✅ All done! Your digital contact cards and wallet passes are now live." 

@@ -13,6 +13,8 @@
     "output_dir": "output",
     "html_output_dir": "output/html",
     "vcf_output_dir": "output/vcf",
+    "passes_output_dir": "output/passes",
+    "signed_passes_dir": "signed_passes",
     "assets_dir": "assets"
   },
   "defaults": {
