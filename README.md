@@ -31,8 +31,7 @@ digital-contact-cards/
 │   ├── index.html             # Team index page template
 │   └── vcard_template.vcf     # VCF file template
 ├── scripts/
-│   ├── generate_site.py       # Main site generation script
-│   └── generate_passes.py     # Apple Wallet pass generation
+│   └── generate_site.py       # Main site generation script (includes wallet passes)
 ├── output/                    # Generated website files (auto-created)
 │   ├── html/                  # Individual contact card pages
 │   ├── vcf/                   # VCF download files
@@ -335,4 +334,4 @@ For issues or questions:
 
 **Project Status**: ✅ Production Ready  
 **Last Updated**: June 2025  
-**Version**: 2.0 (Refactored with Jinja2 + Apple Wallet Integration) 
+**Version**: 2.0 (Refactored with Jinja2 + Apple Wallet Integration)
