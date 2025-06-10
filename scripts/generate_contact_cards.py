@@ -17,6 +17,7 @@ import csv
 import os
 import re
 from pathlib import Path
+import time
 
 
 class ContactCardGenerator:
@@ -99,8 +100,14 @@ class ContactCardGenerator:
         # Check if avatar exists locally
         local_avatar_path = self.check_avatar_exists(member_data['first_name'], member_data['last_name'])
         
+        # Add a cache-busting query parameter
+        cache_buster = str(int(time.time()))
+
         # Replace placeholders in template
         replacements = {
+            # Cache buster for logo
+            '{CACHE_BUSTER}': cache_buster,
+
             # Page title
             'Jane Doe – Acme Startup': f"{member_data['first_name']} {member_data['last_name']} – {member_data['company_name']}",
             
