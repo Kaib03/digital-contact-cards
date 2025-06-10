@@ -35,6 +35,7 @@ class ContactCardGenerator:
         self.vcf_output_dir = self.output_dir / "vcf"
         self.csv_file = base_dir / "team_data.csv"
         self.template_file = self.templates_dir / "example.html"
+        self.index_template_file = self.templates_dir / "index_template.html"
         
         # Create output directories
         self.html_output_dir.mkdir(parents=True, exist_ok=True)
@@ -158,6 +159,36 @@ class ContactCardGenerator:
         
         return html_content
     
+    def generate_index_page(self, team_data, cache_buster):
+        """Generates the main index.html page from a template."""
+        try:
+            with open(self.index_template_file, 'r', encoding='utf-8') as f:
+                index_template = f.read()
+        except FileNotFoundError:
+            print(f"❌ Index template not found: {self.index_template_file}")
+            return
+
+        team_grid_html = ""
+        for member in team_data:
+            filename = self.clean_filename(member['first_name'], member['last_name'])
+            team_grid_html += f"""
+            <div class="member-card">
+                <h3>{member['first_name']} {member['last_name']}</h3>
+                <p>{member['title']}</p>
+                <a href="html/{filename}.html" class="view-button">View Contact Card</a>
+            </div>
+            """
+        
+        # Replace placeholders
+        final_index_html = index_template.replace('{TEAM_GRID}', team_grid_html)
+        final_index_html = final_index_html.replace('{CACHE_BUSTER}', cache_buster)
+
+        # Save the index file to the root of the output directory
+        index_file_path = self.output_dir / "index.html"
+        with open(index_file_path, 'w', encoding='utf-8') as f:
+            f.write(final_index_html)
+        print(f"📄 Generated: index.html")
+
     def generate_vcf(self, member_data):
         """Generate VCF content for a team member."""
         filename = self.clean_filename(member_data['first_name'], member_data['last_name'])
@@ -224,11 +255,13 @@ class ContactCardGenerator:
             return False
         
         if not csv_data:
-            print("❌ Error: No data found in CSV file")
+            print(f"❌ Error: No data found in CSV file")
             return False
         
         print(f"📊 Found {len(csv_data)} team members in CSV")
         
+        cache_buster = str(int(time.time()))
+
         # Generate files for each team member
         generated_count = 0
         for i, member in enumerate(csv_data, 1):
@@ -272,7 +305,10 @@ class ContactCardGenerator:
                 print(f"❌ Error processing row {i}: {e}")
                 continue
         
-        print(f"\n🎉 Successfully generated {generated_count} contact cards!")
+        # Generate the main index page
+        self.generate_index_page(csv_data, cache_buster)
+
+        print(f"\n🎉 Successfully generated {generated_count} contact cards and index page!")
         print(f"📁 HTML files saved to: {self.html_output_dir}")
         print(f"📁 VCF files saved to: {self.vcf_output_dir}")
         
