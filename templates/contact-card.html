@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ member.first_name }} {{ member.last_name }} – {{ config.company.name }}{% endblock %}
+
+{% block body_class %}contact-card-body{% endblock %}
+
+{% block content %}
+<div class="card">
+    <!-- Company logo -->
+    <img class="logo" 
+         src="{{ config.company.logo_url }}{% if config.cache_busting %}?v={{ cache_buster }}{% endif %}" 
+         alt="{{ config.company.name }} Logo">
+
+    <!-- Avatar/photo -->
+    {% if member.avatar_path %}
+    <img class="avatar" 
+         src="{{ member.avatar_path }}" 
+         alt="{{ member.first_name }} {{ member.last_name }}">
+    {% endif %}
+
+    <!-- Name & Title -->
+    <h1>{{ member.first_name }} {{ member.last_name }}</h1>
+    <h2>{{ member.title }}</h2>
+
+    <!-- Save Contact button -->
+    <a class="save-contact" href="../vcf/{{ member.filename }}.vcf" download>💾 Save Contact</a>
+
+    <!-- Contact information -->
+    <div class="contact-info">
+        <!-- Phone -->
+        {% if member.phone %}
+        <a class="contact-item" href="tel:{{ member.phone_clean }}">
+            <span class="icon">📞</span>
+            <span class="label">{{ member.phone_formatted }}</span>
+        </a>
+        {% endif %}
+        
+        <!-- Email -->
+        <a class="contact-item" href="mailto:{{ member.email }}">
+            <span class="icon">✉️</span>
+            <span class="label">{{ member.email }}</span>
+        </a>
+        
+        <!-- LinkedIn -->
+        {% if member.linkedin_url %}
+        <a class="contact-item" href="{{ member.linkedin_url }}" target="_blank">
+            <span class="icon">🔗</span>
+            <span class="label">LinkedIn Profile</span>
+        </a>
+        {% endif %}
+        
+        <!-- Twitter -->
+        {% if member.twitter_handle %}
+        <a class="contact-item" href="https://twitter.com/{{ member.twitter_handle.lstrip('@') }}" target="_blank">
+            <span class="icon">🐦</span>
+            <span class="label">{{ member.twitter_handle if member.twitter_handle.startswith('@') else '@' + member.twitter_handle }}</span>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

@@ -3,7 +3,7 @@
 GitHub Pages Deployment Script
 
 This script automatically deploys the generated HTML contact cards to GitHub Pages.
-It commits all files in output/html/ and pushes them to the repository.
+It commits all files in output/ and pushes them to the repository.
 
 Usage:
     python3 scripts/deploy_to_github.py
@@ -11,7 +11,7 @@ Usage:
 Requirements:
     - Git repository already initialized
     - GitHub Pages repository configured
-    - Files generated in output/html/ directory
+    - Files generated in output/ directory
 """
 
 import os
@@ -29,6 +29,7 @@ class GitHubDeployer:
             base_dir = Path(base_dir)
         
         self.base_dir = base_dir
+        self.output_dir = base_dir / "output"
         self.html_output_dir = base_dir / "output" / "html"
         
     def check_git_status(self):
@@ -43,16 +44,18 @@ class GitHubDeployer:
         except subprocess.CalledProcessError:
             raise Exception("Not in a git repository or git not available")
     
-    def check_html_files_exist(self):
-        """Check if HTML files exist to deploy."""
-        if not self.html_output_dir.exists():
-            raise Exception(f"HTML output directory not found: {self.html_output_dir}")
+    def check_output_files_exist(self):
+        """Check if output files exist to deploy."""
+        if not self.output_dir.exists():
+            raise Exception(f"Output directory not found: {self.output_dir}")
         
-        html_files = list(self.html_output_dir.glob("*.html"))
-        if not html_files:
+        html_files = list(self.html_output_dir.glob("*.html")) if self.html_output_dir.exists() else []
+        index_file = self.output_dir / "index.html"
+        
+        if not html_files and not index_file.exists():
             raise Exception("No HTML files found to deploy")
         
-        return html_files
+        return html_files, index_file.exists()
     
     def add_and_commit_files(self):
         """Add and commit all changes."""
@@ -124,9 +127,10 @@ class GitHubDeployer:
         print("🚀 Starting GitHub Pages Deployment...")
         
         try:
-            # Check if HTML files exist
-            html_files = self.check_html_files_exist()
-            print(f"📄 Found {len(html_files)} HTML files to deploy")
+            # Check if output files exist
+            html_files, has_index = self.check_output_files_exist()
+            total_files = len(html_files) + (1 if has_index else 0)
+            print(f"📄 Found {total_files} HTML files to deploy")
             
             # Check git status
             git_status = self.check_git_status()
@@ -145,18 +149,24 @@ class GitHubDeployer:
             push_result = self.push_to_github()
             print("✅ Successfully pushed to GitHub")
             
-            # Show GitHub Pages URL if available
+            # Show GitHub Pages URLs
             pages_url = self.get_github_pages_url()
             if pages_url:
-                print(f"🌐 Your contact cards will be available at: {pages_url}")
-                print("📋 Individual contact card URLs:")
-                for html_file in html_files:
-                    file_url = f"{pages_url}output/html/{html_file.name}"
-                    print(f"   • {html_file.stem}: {file_url}")
+                print(f"🌐 Your contact cards website is available at:")
+                print(f"   🏠 Main site: {pages_url}")
+                if has_index:
+                    print(f"   📋 Team index: {pages_url}output/index.html")
+                
+                if html_files:
+                    print("📋 Individual contact card URLs:")
+                    for html_file in html_files:
+                        file_url = f"{pages_url}output/html/{html_file.name}"
+                        print(f"   • {html_file.stem}: {file_url}")
             else:
                 print("🌐 Unable to determine GitHub Pages URL automatically")
             
             print("\n🎉 Deployment completed successfully!")
+            print("\n💡 Note: It may take a few minutes for changes to appear on GitHub Pages")
             return True
             
         except Exception as e:

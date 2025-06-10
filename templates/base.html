@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ config.company.name }}{% endblock %}</title>
+    {% if config.cache_busting %}
+    <link rel="stylesheet" href="{{ config.deployment.base_url }}/assets/css/style.css?v={{ cache_buster }}">
+    {% else %}
+    <link rel="stylesheet" href="{{ config.deployment.base_url }}/assets/css/style.css">
+    {% endif %}
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    {% block content %}{% endblock %}
+</body>
+</html> 

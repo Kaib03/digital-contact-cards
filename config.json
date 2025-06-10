@@ -1,0 +1,32 @@
+{
+  "company": {
+    "name": "ScaleWave",
+    "logo_url": "https://kaib03.github.io/digital-contact-cards/assets/images/logo_hi-res.png"
+  },
+  "deployment": {
+    "github_pages_url": "https://kaib03.github.io/digital-contact-cards",
+    "base_url": "https://kaib03.github.io/digital-contact-cards"
+  },
+  "paths": {
+    "csv_file": "team_data.csv",
+    "templates_dir": "templates",
+    "output_dir": "output",
+    "html_output_dir": "output/html",
+    "vcf_output_dir": "output/vcf",
+    "assets_dir": "assets"
+  },
+  "defaults": {
+    "company_name": "ScaleWave",
+    "title": "Team Member",
+    "phone": "",
+    "linkedin_url": "",
+    "twitter_handle": "",
+    "avatar_url": ""
+  },
+  "required_fields": [
+    "first_name",
+    "last_name",
+    "email"
+  ],
+  "cache_busting": true
+} 

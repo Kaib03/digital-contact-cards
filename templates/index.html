@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.company.name }} Team{% endblock %}
+
+{% block body_class %}index-body{% endblock %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <img src="{{ config.company.logo_url }}{% if config.cache_busting %}?v={{ cache_buster }}{% endif %}" 
+         alt="{{ config.company.name }} Logo" 
+         class="main-logo">
+    
+    <div class="team-grid">
+        {% for member in team_members %}
+        <div class="member-card">
+            <h3>{{ member.first_name }} {{ member.last_name }}</h3>
+            <p>{{ member.title }}</p>
+            <a href="html/{{ member.filename }}.html" class="view-button">View Contact Card</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 
