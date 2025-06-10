@@ -29,7 +29,7 @@
       background: #ffffff;
       border-radius: 20px;
       box-shadow: 0 20px 40px rgba(31, 75, 140, 0.1);
-      padding: 0.5rem 1rem 1rem 1rem;
+      padding: 3rem 1rem 1rem 1rem;  /* Increased top padding to move everything lower */
       position: relative;
       overflow: hidden;
     }
@@ -45,11 +45,12 @@
     }
     
     .logo { 
-      width: 156px;             /* 30% bigger than 120px */
+      width: 156px;
       height: auto;
-      margin-top: -0.5rem;      /* reduced negative margin for better spacing */
-      margin-bottom: 0.5rem;    /* increased bottom margin to 0.5rem */
-      margin-right: 0.8rem;     /* move logo slightly to the right for better text centering */
+      margin-left: 2.5rem;   /* Moved logo further to the right */
+      margin-top: 1rem;
+      margin-bottom: 2rem;   /* Increased bottom margin for more space before name */
+      display: block;
       opacity: 0.95;
     }
     
@@ -64,7 +65,7 @@
     }
     
     h1 { 
-      margin: -0.5rem 0 0.2rem 0; 
+      margin: 0.5rem 0 0.2rem 0; /* Reduced top margin since logo now has bottom margin */
       font-size: 1.8rem; 
       font-weight: 700;
       color: #1f4b8c;
@@ -159,7 +160,7 @@
 <body>
   <div class="card">
     <!-- Company logo -->
-    <img class="logo" src="https://kaib03.github.io/digital-contact-cards/assets/images/logo_scalewave_cropped.png" alt="ScaleWave Logo"/>
+    <img class="logo" src="https://Kaib03.github.io/digital-contact-cards/assets/images/logo_hi-res.png" alt="ScaleWave Logo"/>
 
     <!-- Avatar/photo -->
     <img class="avatar" src="https://your-org.github.io/team-contacts/assets/jane.jpg" alt="Jane Doe"/>
@@ -195,4 +196,4 @@
     </div>
   </div>
 </body>
-</html>
+</html> 
