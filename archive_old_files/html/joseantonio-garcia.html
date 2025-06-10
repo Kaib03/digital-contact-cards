@@ -45,11 +45,13 @@
     }
     
     .logo { 
-      width: 156px;             /* 30% bigger than 120px */
+      width: 156px;
       height: auto;
-      margin-top: -0.5rem;      /* reduced negative margin for better spacing */
-      margin-bottom: 0.5rem;    /* increased bottom margin to 0.5rem */
-      margin-right: 0.8rem;     /* move logo slightly to the right for better text centering */
+      margin-left: auto;     /* Centering the logo */
+      margin-right: auto;    /* Centering the logo */
+      margin-top: 1rem;        /* Adding space above */
+      margin-bottom: 1.5rem;   /* Adding space below */
+      display: block;          /* Needed for auto margins to work */
       opacity: 0.95;
     }
     
@@ -64,7 +66,7 @@
     }
     
     h1 { 
-      margin: -0.5rem 0 0.2rem 0; 
+      margin: 1.5rem 0 0.2rem 0; /* Added top margin to push name down */
       font-size: 1.8rem; 
       font-weight: 700;
       color: #1f4b8c;

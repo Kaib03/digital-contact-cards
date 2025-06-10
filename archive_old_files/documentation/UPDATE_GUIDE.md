@@ -17,7 +17,7 @@
 ### **Step 2: Regenerate & Deploy**
 Run the deployment script:
 ```bash
-./deploy.sh
+./documentation/deploy.sh
 ```
 
 This automatically:
@@ -119,7 +119,7 @@ When updating contact information:
 ### **Full Update Workflow:**
 ```bash
 # 1. Edit team_data.csv first, then:
-./deploy.sh
+./documentation/deploy.sh
 git add .
 git commit -m "Update contact information"
 git push origin main

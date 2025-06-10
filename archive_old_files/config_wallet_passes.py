@@ -13,8 +13,8 @@ Update these values before generating passes:
 # =============================================================================
 
 # Apple Developer Account Information (GET FROM YOUR COLLEAGUE)
-PASS_TYPE_IDENTIFIER = "pass.com.yourteam.scalewave.contact"  # REQUIRED: Replace with actual Pass Type ID
-TEAM_IDENTIFIER = "YOUR_TEAM_ID"  # REQUIRED: Replace with actual Apple Team ID
+PASS_TYPE_IDENTIFIER = "pass.com.scalewave.contacts.team"  # Scalewave Pass Type ID
+TEAM_IDENTIFIER = "VVA864P233"  # Scalewave Team ID
 
 # GitHub Pages URL (UPDATE TO MATCH YOUR DEPLOYMENT)
 GITHUB_PAGES_URL = "https://kaib03.github.io/digital-contact-cards/"  # REQUIRED: Update with actual URL

@@ -1,0 +1,77 @@
+{
+  "formatVersion": 1,
+  "serialNumber": "012a6d08-4420-4c4e-b86f-b62795bc91c3",
+  "webServiceURL": "https://kaib03.github.io/digital-contact-cards/",
+  "authenticationToken": "scalewave-samer-roz-token",
+  "locations": [
+    {
+      "longitude": -122.3748889,
+      "latitude": 37.6189722
+    },
+    {
+      "longitude": -122.03118,
+      "latitude": 37.33182
+    }
+  ],
+  "barcode": {
+    "message": "https://kaib03.github.io/digital-contact-cards/html/samer-roz.html",
+    "format": "PKBarcodeFormatPDF417",
+    "messageEncoding": "iso-8859-1"
+  },
+  "organizationName": "Scalewave",
+  "description": "Scalewave Contact Card",
+  "logoText": "Scalewave",
+  "foregroundColor": "rgb(255, 255, 255)",
+  "backgroundColor": "rgb(25, 25, 25)",
+  "passTypeIdentifier": "pass.com.scalewave.contacts.team",
+  "teamIdentifier": "VVA864P233",
+  "generic": {
+    "primaryFields": [
+      {
+        "key": "member",
+        "value": "Samer Roz"
+      }
+    ],
+    "secondaryFields": [
+      {
+        "key": "title",
+        "label": "TITLE",
+        "value": "Junior Software Engineer"
+      }
+    ],
+    "auxiliaryFields": [
+      {
+        "key": "company",
+        "label": "COMPANY",
+        "value": "Scalewave"
+      },
+      {
+        "key": "contact",
+        "label": "CONTACT",
+        "value": "Scan for Details"
+      }
+    ],
+    "backFields": [
+      {
+        "label": "Email",
+        "key": "email",
+        "value": "sroz.ieu2022@student.ie.edu"
+      },
+      {
+        "label": "Phone",
+        "key": "phone",
+        "value": "+34628512387"
+      },
+      {
+        "label": "LinkedIn",
+        "key": "linkedin",
+        "value": "https://www.linkedin.com/in/samerroz03/"
+      },
+      {
+        "label": "Contact Page",
+        "key": "website",
+        "value": "https://kaib03.github.io/digital-contact-cards/html/samer-roz.html"
+      }
+    ]
+  }
+}

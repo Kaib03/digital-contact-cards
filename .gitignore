@@ -5,7 +5,6 @@
 *.certSigningRequest
 
 # Output directories (will be regenerated)
-output/
 pass_previews/
 passes/
 
