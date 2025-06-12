@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Isabel Figueroa
+N:Figueroa;Isabel;;;
+TITLE:Junior Software Engineer
+ORG:ScaleWave
+TEL;TYPE=WORK,VOICE:+34627421588
+EMAIL;TYPE=WORK:isabel@scalewave.es
+URL;TYPE=LinkedIn:https://www.linkedin.com/in/isabel-figueroa-66173629b/
+END:VCARD
