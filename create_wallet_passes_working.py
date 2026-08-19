@@ -32,6 +32,38 @@ def clean_filename(name):
     """Generate a clean filename from name."""
     return name.lower().replace(' ', '-').replace('.', '').replace(',', '')
 
+def escape_vcard(value):
+    """Escape characters that are structural in vCard field values."""
+    return (value or "").replace('\\', '\\\\').replace(';', '\\;').replace(',', '\\,')
+
+def build_vcard(member_data):
+    """Build a vCard string to embed directly in the QR code.
+
+    Encoding the contact details in the barcode instead of a URL means scanning
+    the pass drops the contact straight into the phone, with no network needed.
+    """
+    first = member_data['first_name'].strip()
+    last = member_data['last_name'].strip()
+    phone = ''.join(c for c in member_data.get('phone', '') if c.isdigit() or c == '+')
+
+    lines = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        f'N:{escape_vcard(last)};{escape_vcard(first)};;;',
+        f'FN:{escape_vcard(first)} {escape_vcard(last)}',
+        f'TITLE:{escape_vcard(member_data.get("title", "Team Member"))}',
+        f'ORG:{escape_vcard(ORGANIZATION_NAME)}',
+    ]
+    if phone:
+        lines.append(f'TEL;TYPE=CELL:{phone}')
+    if member_data.get('email'):
+        lines.append(f'EMAIL;TYPE=WORK:{member_data["email"].strip()}')
+    if member_data.get('linkedin_url'):
+        lines.append(f'URL:{member_data["linkedin_url"].strip()}')
+    lines.append('END:VCARD')
+
+    return '\r\n'.join(lines) + '\r\n'
+
 def create_pass_dict(member_data):
     """Create pass dictionary following TranzerCode structure exactly with Scalewave branding."""
     full_name = f"{member_data['first_name']} {member_data['last_name']}"
@@ -58,12 +90,13 @@ def create_pass_dict(member_data):
         "backgroundColor": COLORS["background"],        # Pure white background
         "labelColor": COLORS["labels"],                 # Dark blue labels
         
-        # QR Code with altText for a title
+        # QR Code carrying the contact details themselves, so scanning saves the
+        # contact directly instead of depending on the site being reachable.
         "barcode": {
-            "message": qr_url,
+            "message": build_vcard(member_data),
             "format": "PKBarcodeFormatQR",
-            "messageEncoding": "iso-8859-1",
-            "altText": "Scan for Contact" # This text is rendered near the barcode
+            "messageEncoding": "utf-8",
+            "altText": "Scan to save contact" # This text is rendered near the barcode
         },
         
         # Final Layout: "CONTACT CARD" as a title, side-by-side secondary fields
