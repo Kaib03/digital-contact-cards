@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Jose Antonio Garcia
+N:Garcia;Jose Antonio;;;
+TITLE:CTO
+ORG:ScaleWave
+TEL;TYPE=WORK,VOICE:+34634389637
+EMAIL;TYPE=WORK:jose@scalewave.es
+URL;TYPE=LinkedIn:https://www.linkedin.com/in/jose-antonio-garcia-escandon
+END:VCARD

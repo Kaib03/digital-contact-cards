@@ -1,0 +1,9 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Marco Paasche
+N:Paasche;Marco;;;
+TITLE:Junior Software Engineer
+ORG:ScaleWave
+TEL;TYPE=WORK,VOICE:+34691721083
+EMAIL;TYPE=WORK:marco@scalewave.es
+END:VCARD

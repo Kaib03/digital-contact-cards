@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Victor Bellens
+N:Bellens;Victor;;;
+TITLE:Junior Software Engineer
+ORG:ScaleWave
+TEL;TYPE=WORK,VOICE:+34637531793
+EMAIL;TYPE=WORK:vicbellens@gmail.com
+URL;TYPE=LinkedIn:https://www.linkedin.com/victorbellens
+URL;TYPE=Twitter:https://twitter.com/victor_bellens
+END:VCARD
